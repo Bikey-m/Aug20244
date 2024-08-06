@@ -1,32 +1,30 @@
-version: '3.8'
-
 services:
   one:
+    image: node:14-slim
     build:
-      context: one/
-      dockerfile: Dockerfile    
-    image: one_image 
-    ports:
-      - "3001:3000"
-    container_name: one    
-
+      context: .
+      dockerfile: Dockerfile.one
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: npm install
 
   two:
-    image: nodejs2
-    ports:
-      - "3002:3000"
-    container_name: two    
+    image: node:18.16.0-alpine3.17
     build:
-      context: two/
-      dockerfile: Dockerfile
+      context: ./src
+      dockerfile: Dockerfile.two
+    working_dir: /opt/app
+    volumes:
+      - ./src:/opt/app
+    command: npm install
+
   three:
+    image: python:3.8-slim
     build:
-      context: three/
-      dockerfile: Dockerfile
-    ports:
-      - "3003:8000"
-    container_name: three
-
-
-
-
+      context: .
+      dockerfile: Dockerfile.three
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: touch index.html
